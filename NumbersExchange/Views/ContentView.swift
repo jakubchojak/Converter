@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(\.alerterKey) var theAlerter
     var toPick = [2, 8, 10, 16]
     @State var selectedExpectedSystem = 2
     @State var selectedUserSystem = 10
@@ -30,49 +31,50 @@ struct ContentView: View {
                     Text("Converter")
                         .bold()
                         .font(.system(size: 32))
-                        .padding(.bottom, 50)
-                        .padding(.top, -50)
                         .foregroundColor(.white)
                     
+                    Spacer()
                     
-                    TextField("Wprowadź liczbę do konwersji", text: $userInput)
-                        .focused($focus, equals: .numberToConvert)
-                        .foregroundColor(.white)
-                        .accentColor(/*@START_MENU_TOKEN@*/.white/*@END_MENU_TOKEN@*/)
-                
-//                    TextField("Wprowadź podstawę systemu", text: $userSystem)
-//                        .keyboardType(/*@START_MENU_TOKEN@*/.numberPad/*@END_MENU_TOKEN@*/)
-//                        .foregroundColor(.white)
-//                        .focused($focus, equals: .numberSystem)
-//                        .accentColor(/*@START_MENU_TOKEN@*/.white/*@END_MENU_TOKEN@*/)
-//
-//                    TextField("Wprowadź system do którego liczba ma zostać skonwertowana", text: $expectedSystem)
-//                        .keyboardType(/*@START_MENU_TOKEN@*/.numberPad/*@END_MENU_TOKEN@*/)
-//                        .foregroundColor(.white)
-//                        .focused($focus, equals: .expectedSystem)
-//                        .accentColor(/*@START_MENU_TOKEN@*/.white/*@END_MENU_TOKEN@*/)
-                    HStack {
-                        Text("System podstawowy")
-                            .foregroundColor(.white)
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 25)
+                            .frame(maxHeight: 40)
+                            .foregroundColor(Color(uiColor: K.textColor))
                         
-                        Picker("", selection: $selectedUserSystem, content: {
-                            ForEach(toPick, id: \.self) {
-                                Text("\($0)")
-                            }
-                        })
-                        .accentColor(/*@START_MENU_TOKEN@*/.white/*@END_MENU_TOKEN@*/)
+                        TextField("Wprowadź liczbę do konwersji", text: $userInput)
+                            .focused($focus, equals: .numberToConvert)
+                            .foregroundColor(.teal)
+                            .accentColor(.teal)
+                            .multilineTextAlignment(.center)
                     }
                     
-                    HStack {
-                        Text("System docelowy")
-                            .foregroundColor(.white)
+                    Spacer()
+                    
+                    ZStack {
                         
-                        Picker("", selection: $selectedExpectedSystem, content: {
-                            ForEach(toPick, id: \.self) {
-                                Text("\($0)")
-                            }
-                        })
-                        .accentColor(/*@START_MENU_TOKEN@*/.white/*@END_MENU_TOKEN@*/)
+                        RoundedRectangle(cornerRadius: 25)
+                            .frame(maxHeight: 80)
+                            .foregroundColor(Color(uiColor: K.textColor))
+                        
+                        HStack(spacing: 50) {
+                            Picker("", selection: $selectedUserSystem, content: {
+                                ForEach(toPick, id: \.self) {
+                                    Text("\($0)")
+                                }
+                            })
+                            .accentColor(.teal)
+                            
+                            Image(systemName: "arrow.right")
+                                .foregroundColor(.gray)
+                                .bold()
+                            
+                            Picker("", selection: $selectedExpectedSystem, content: {
+                                ForEach(toPick, id: \.self) {
+                                    Text("\($0)")
+                                }
+                            })
+                            .accentColor(.teal)
+                            
+                        }
                     }
                     
                     .toolbar {
@@ -85,24 +87,55 @@ struct ContentView: View {
                         }
                     }
                     
+                    Spacer()
+                    
                     Button {
                         numberRepresentatorManager.setBody(b: userInput.uppercased())
                         numberRepresentatorManager.setSystem(s: selectedUserSystem)
                         answerLabel = numberRepresentatorManager.convertToAnySystem(anySystem: selectedExpectedSystem) ?? ""
+                        if K.showErrorMessage {
+                            theAlerter.showErrorMessage = true
+                        }
+                        else {
+                            theAlerter.showErrorMessage = false
+                        }
+                        
                     } label: {
-                        Text("Wykonaj")
-                            .bold()
-                            .foregroundColor(Color(uiColor: UIColor(red: 0.9098, green: 0.9098, blue: 0.9412, alpha: 1.0)))
-                            .font(.system(size: 24))
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 25)
+                                .foregroundColor(Color(uiColor: K.textColor))
+                                .frame(maxHeight: 80.0)
+                            Text("Oblicz")
+                                .bold()
+                                .foregroundColor(Color.blue)
+                                .font(.system(size: 24))
+                        }
+                        
+                        
                     }
                     .padding(.top, 20)
                     
+                    
                     if answerLabel != "" {
-                        Text("Wynik: \(answerLabel)")
-                            .padding(.top, 50)
-                            .foregroundColor(.white)
-                            .bold()
-                            .font(.system(size: 20))
+                        
+                        Button {
+                            UIPasteboard.general.string = answerLabel
+                        } label: {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 25)
+                                    .foregroundColor(Color(uiColor: K.textColor))
+                                    .frame(maxHeight: 40.0)
+                                
+                                HStack {
+                                    Image(systemName: "clipboard.fill")
+                                        .foregroundColor(.gray)
+                                    Text("\(answerLabel)")
+                                        .foregroundColor(.cyan)
+                                        .bold()
+                                        .font(.system(size: 20))
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -116,11 +149,9 @@ struct ContentView: View {
                         Image(systemName: "gear")
                             .foregroundColor(.white)
                     }
-
-
                 }
             }
         }
+        .accentColor(Color(uiColor: K.textColor))
     }
 }
-

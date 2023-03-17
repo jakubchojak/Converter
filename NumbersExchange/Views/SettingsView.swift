@@ -8,20 +8,6 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-
-        var btnBack : some View { Button(action: {
-            self.presentationMode.wrappedValue.dismiss()
-            }) {
-                HStack {
-                Image(systemName: "chevron.backward") // set image here
-                    .aspectRatio(contentMode: .fit)
-                    .foregroundColor(.white)
-                    Text("Powrót")
-                        .foregroundColor(.white)
-                }
-            }
-        }
     
     @State var realApproximationSliderValue = getApproxFromFile() ?? K.defaultApprox
     var picks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
@@ -33,45 +19,97 @@ struct SettingsView: View {
                     .font(.system(size: 32))
                     .bold()
                     .foregroundColor(.white)
-                    .multilineTextAlignment(.leading)
-                    .padding(.bottom, 80)
                 
-                HStack(spacing: 50) {
-                    Text("Precyzja liczb rzeczywistych")
-                        .foregroundColor(.white)
+                Spacer()
+                
+                ZStack {
+                    RoundedRectangle(cornerRadius: 25)
+                        .foregroundColor(Color(uiColor: K.textColor))
+                        .frame(maxHeight: 40.0)
                     
-                    Picker("", selection: $realApproximationSliderValue) {
-                        ForEach(picks, id: \.self) {
-                            Text("\($0)")
+                    HStack(spacing: 30) {
+                        Image(systemName: "magnifyingglass.circle.fill")
+                            .foregroundColor(.gray)
+                            .bold()
+                        
+                        Text("Precyzja")
+                            .foregroundColor(.cyan)
+                            .bold()
+                        
+                        
+                        Picker("", selection: $realApproximationSliderValue) {
+                            ForEach(picks, id: \.self) {
+                                Text("\($0)")
+                            }
                         }
-                    }
-                    .foregroundColor(.white)
-                    .accentColor(.white)
-                    .onChange(of: realApproximationSliderValue) { value in
-                        print(value)
-                        writeApproxToFile(userApprox: value)
+                        .foregroundColor(.cyan)
+                        .accentColor(.cyan)
+                        .onChange(of: realApproximationSliderValue) { value in
+                            print(value)
+                            writeApproxToFile(userApprox: value)
+                        }
+                        
                     }
                 }
                 .padding()
                 
-                HStack {
-                    Link(destination: URL(string: "https://metrystadiamentowy.wixsite.com/my-site-2/privacy-policy")!) {
+                Spacer()
+                
+                Link(destination: URL(string: "https://metrystadiamentowy.wixsite.com/my-site-2/privacy-policy")!) {
+                    
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 25)
+                            .frame(maxHeight: 80)
+                            .foregroundColor(Color(uiColor: K.textColor))
+                        
                         Text("Polityka prywatności")
-                            .foregroundColor(.white)
+                            .foregroundColor(.blue)
                             .bold()
                     }
-                    Link(destination: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!) {
+                    
+                    
+                }
+                .padding(.trailing)
+                .padding(.leading)
+                
+                Link(destination: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 25)
+                            .frame(maxHeight: 80)
+                            .foregroundColor(Color(uiColor: K.textColor))
+                        
                         Text("EULA")
-                            .foregroundColor(.white)
+                            .foregroundColor(.blue)
                             .bold()
                     }
                 }
-                .padding(.top, 50)
+                .padding(.trailing)
+                .padding(.leading)
+                
+                ZStack {
+                    RoundedRectangle(cornerRadius: 25)
+                        .frame(maxHeight: 80)
+                        .foregroundColor(Color(uiColor: K.textColor))
+                    
+                    HStack(spacing: 50) {
+                        Link(destination: URL(string: "https://github.com/jakubchojak")!) {
+                            Image("github_logo")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(maxWidth: 70, maxHeight: 70)
+                        }
+                        
+                        Link(destination: URL(string: "https://www.linkedin.com/in/jakub-chojak-282308203/")!) {
+                            Image("linkedin_logo")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(maxWidth: 60, maxHeight: 60)
+                        }
+                    }
+                }
+                .padding(.trailing)
+                .padding(.leading)
             }
         }
-        .background(Color.teal).ignoresSafeArea()
-        .navigationBarBackButtonHidden(true)
-        .navigationBarItems(leading: btnBack)
-    
     }
 }

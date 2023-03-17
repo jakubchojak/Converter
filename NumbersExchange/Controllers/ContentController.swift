@@ -9,11 +9,16 @@ import Foundation
 
 var numberRepresentatorManager = NumberRepresentation()
 
-func convertToInt(system: String) -> Int {
+func convertToInt(system: String) throws -> Int {
     var output = 0
     var i = system.count - 1
     for char in system {
-        let tmp = Int(String(char))! - Int("0")!
+        let tmp = Int(String(char)) ?? -1 - Int("0")!
+        guard tmp > Int("0")! else {
+            K.showErrorMessage = true
+            throw ConversionErrors.ImproperlySystemSet
+        }
+        K.showErrorMessage = false
         output +=  tmp * Int(pow(10.0, Double(i)))
         i -= 1
     }
@@ -28,7 +33,17 @@ func getApproxFromFile() -> Int? {
     let filePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("approx.txt")
     let cont = try? String(contentsOf: filePath, encoding: .utf8)
     if let c = cont {
-        return convertToInt(system: c)
+        do {
+            let tmp = try convertToInt(system: c)
+            return tmp
+        }
+        catch ConversionErrors.ImproperlySystemSet {
+            print("My bad")
+            return nil
+        }
+        catch {
+            print("Unexpected Error")
+        }
     }
     return nil
 }

@@ -48,6 +48,10 @@ class NumberRepresentation {
         var power = body!.count - 1
         
         for char in body ?? "" {
+            if char.asciiValue! > UnicodeScalar("F").value {
+                K.showErrorMessage = true
+                return
+            }
             if char.asciiValue! > UnicodeScalar("9").value {
                 let tmp = UInt32(char.asciiValue!) - UnicodeScalar("A").value + 10
                 output += Int(tmp) * Int(pow(Double(system!), Double(power)))
@@ -65,7 +69,17 @@ class NumberRepresentation {
     
     func convertFromDecimal(into: Int) {
         var output = ""
-        var number = convertToInt(system: body ?? "")
+        var number = -1
+        do {
+            number = try convertToInt(system: body ?? "")
+        }
+        catch ConversionErrors.ImproperlySystemSet {
+            print("Conversion Error")
+        }
+        catch {
+            print("Unexpected Error")
+        }
+        
         while number > 0 {
             if number % into < 10 {
                 output.append(String(number % into))
