@@ -22,6 +22,7 @@
 /* Begin PBXFileReference section */
 		AF4C812829C46A65001A5B7A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AF4C812A29C46BD1001A5B7A /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		AF8A1B4C29C4E2DA00D23C18 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		AFA0F23628FFF7DD0032CEED /* NumbersExchange.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NumbersExchange.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFA0F23928FFF7DD0032CEED /* NumbersExchangeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumbersExchangeApp.swift; sourceTree = "<group>"; };
 		AFA0F23B28FFF7DD0032CEED /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -58,6 +59,7 @@
 		AFA0F22D28FFF7DD0032CEED = {
 			isa = PBXGroup;
 			children = (
+				AF8A1B4C29C4E2DA00D23C18 /* README.md */,
 				AFA0F23828FFF7DD0032CEED /* NumbersExchange */,
 				AFAEDB71292F8B0300108166 /* Frameworks */,
 				AFA0F23728FFF7DD0032CEED /* Products */,
