@@ -14,7 +14,7 @@ func convertToInt(system: String) throws -> Int {
     var i = system.count - 1
     for char in system {
         let tmp = Int(String(char)) ?? -1 - Int("0")!
-        guard tmp > Int("0")! else {
+        guard tmp >= Int("0")! else {
             K.showErrorMessage = true
             throw ConversionErrors.ImproperlySystemSet
         }

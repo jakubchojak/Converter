@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ContentView: View {
-    @Environment(\.alerterKey) var theAlerter
     var toPick = [2, 8, 10, 16]
     @State var selectedExpectedSystem = 2
     @State var selectedUserSystem = 10
@@ -20,6 +19,8 @@ struct ContentView: View {
     @State var expectedSystem = ""
     @State var answerLabel = ""
     @State var action: Int?
+    @State var showCopyAlert = false
+    @State var showImproperNumberAlert = false
     
     @FocusState private var focus: Field?
     
@@ -28,6 +29,50 @@ struct ContentView: View {
             ZStack {
                 Color.teal.ignoresSafeArea()
                 VStack {
+                    if showCopyAlert {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 25)
+                                .foregroundColor(Color(uiColor: K.textColor))
+                                .frame(maxWidth: 200, maxHeight: 30)
+                            Button {
+                                withAnimation(.easeOut(duration: K.animationDuration)) {
+                                    self.showCopyAlert = false
+                                }
+                            } label: {
+                                HStack {
+                                    Image(systemName: "x.circle.fill")
+                                        .foregroundColor(.gray)
+                                    Text("Copied!")
+                                        .foregroundColor(.black)
+                                        .bold()
+                                }
+                            }
+                        }
+                        .padding(.vertical, -35)
+                    }
+                    
+                    if showImproperNumberAlert {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 25)
+                                .foregroundColor(Color(uiColor: K.textColor))
+                                .frame(maxWidth: 200, maxHeight: 30)
+                            Button {
+                                withAnimation(.easeOut(duration: K.animationDuration)) {
+                                    self.showImproperNumberAlert = false
+                                }
+                            } label: {
+                                HStack {
+                                    Image(systemName: "x.circle.fill")
+                                        .foregroundColor(.gray)
+                                    Text("Improper number!")
+                                        .foregroundColor(.black)
+                                        .bold()
+                                }
+                            }
+                        }
+                        .padding(.vertical, -35)
+                    }
+                    
                     Text("Converter")
                         .bold()
                         .font(.system(size: 32))
@@ -92,12 +137,18 @@ struct ContentView: View {
                     Button {
                         numberRepresentatorManager.setBody(b: userInput.uppercased())
                         numberRepresentatorManager.setSystem(s: selectedUserSystem)
-                        answerLabel = numberRepresentatorManager.convertToAnySystem(anySystem: selectedExpectedSystem) ?? ""
+                        withAnimation(.easeInOut(duration: K.animationDuration)) {
+                            answerLabel = numberRepresentatorManager.convertToAnySystem(anySystem: selectedExpectedSystem) ?? ""
+                        }
                         if K.showErrorMessage {
-                            theAlerter.showErrorMessage = true
+                            withAnimation(.easeIn(duration: K.animationDuration)) {
+                                self.showImproperNumberAlert = true
+                            }
                         }
                         else {
-                            theAlerter.showErrorMessage = false
+                            withAnimation(.easeOut(duration: K.animationDuration)) {
+                                self.showImproperNumberAlert = false
+                            }
                         }
                         
                     } label: {
@@ -120,6 +171,9 @@ struct ContentView: View {
                         
                         Button {
                             UIPasteboard.general.string = answerLabel
+                            withAnimation(.easeInOut(duration: K.animationDuration)) {
+                                showCopyAlert = true
+                            }
                         } label: {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 25)
