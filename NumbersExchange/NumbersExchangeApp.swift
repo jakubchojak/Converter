@@ -26,7 +26,7 @@ struct AlerterKey: EnvironmentKey {
 
 extension EnvironmentValues {
     var alerterKey: Alerter {
-        get { return self[AlerterKey] }
-        set { self[AlerterKey] = newValue }
+        get { return self[AlerterKey.self] }
+        set { self[AlerterKey.self] = newValue }
     }
 }
